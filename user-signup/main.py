@@ -86,7 +86,7 @@ def validate_username():
             email_error =''
             
 
-    if not username_error and not password_error and not verify_error:
+    if not username_error and not password_error and not verify_error and not email_error:
         name = username
         return redirect('/valid_submission?name={0}'.format(name))
     else:
