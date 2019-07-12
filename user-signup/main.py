@@ -4,11 +4,11 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 
-@app.route('/validate_signup')
+@app.route('/')
 def display_user_form():
     return render_template('index.html')
 
-@app.route('/validate_signup', methods=['POST'])
+@app.route('/', methods=['POST'])
 def validate_username():
 
     username = request.form['username']
@@ -79,9 +79,10 @@ def validate_username():
             countp = 1 + countp
     if countp > 1:
         email_error = "Please submit a valid email."
-
-    if len(email) < 3 or len(email) > 20:
-            email_error = 'Please submit an email between 3 and 20 characters.'
+    
+    if len(email) > 0:
+        if len(email[:email.index('@')]) < 3 or len(email[:email.index('@')]) > 20:
+                email_error = 'Put email with ONLY one . and ONE @'
     if len(email) == 0:
             email_error =''
             
