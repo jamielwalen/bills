@@ -1,0 +1,27 @@
+h1 {
+    text-align: center;
+    color: white
+}
+
+body {
+    font-family: sans-serif;
+    background-color: lightblue;
+    color: darkblue
+
+}
+
+form {
+    float: left;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+label {
+  display: inline-block;
+  width: 140px;
+  text-align: left;
+}​
+
+p {
+   color: red;
+}
