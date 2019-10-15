@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://wwww.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body>
+<body class="container">
 <h1 th:text="${title}">Default Title</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
 <form method="post">
-<tr>
 
-    <td th:each="cheese : ${cheeses}">
-        <input type="checkbox" id="cheese" name="cheese" th:value="${cheese.key}" th:text="${cheese.key}"/><br>
 
-    </td>
+    <div th:each="cheese : ${cheeses}" class="checkbox">
+        <input type="checkbox" th:id="${cheese.cheeseId}" name="cheeseIds" th:value="${cheese.cheeseId}"/>
+        <label th:for="${cheese.cheeseId}" th:text="${cheese.name}"></label>
+        <br>
 
-</tr>
+    </div>
+
+
     <input type="submit" value="Remove Cheese" />
 </form>
 

@@ -25,3 +25,7 @@ label {
 p {
    color: red;
 }
+
+error {
+    font-color: red;
+}

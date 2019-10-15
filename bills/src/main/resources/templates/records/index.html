@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+
+<table class="table">
+
+    <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Business</th>
+        <th>Website</th>
+        <th>Amount</th>
+    </tr>
+
+    <tr th:each="bill: ${bills}">
+        <td th:text="${bill.type}"></td>
+        <td th:text="${bill.name}"></td>
+        <td th:text="${bill.business}"></td>
+        <td><a th:text="${bill.website}" th:href="${bill.website}" th:target="_blank"></a></td>
+        <td><input class="form-control" style="max-width:100px;"/></td>
+    </tr>
+
+</table>
+
+<nav th:fragment="navigation">
+    <a href="/records/add">Add</a> |
+    <a href="/records/remove">Remove</a>
+</nav>
+
+</body>
+</html>

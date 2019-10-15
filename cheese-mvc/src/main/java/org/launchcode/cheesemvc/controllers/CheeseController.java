@@ -1,30 +1,27 @@
 package org.launchcode.cheesemvc.controllers;
 
 
+import org.launchcode.cheesemvc.models.Cheese;
+import org.launchcode.cheesemvc.models.CheeseData;
+import org.launchcode.cheesemvc.models.CheeseType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping(value = "cheese")
+@RequestMapping("cheese")
 public class CheeseController {
 
-
-    HashMap<String, String> cheeses = new HashMap<>();
-
-
-
-    static ArrayList<String> cheese_remove = new ArrayList<>();
 
     @RequestMapping(value = "")
     public String index(Model model) {
 
-        model.addAttribute("cheeses", cheeses);
+        model.addAttribute("cheeses", CheeseData.getAll());
         model.addAttribute("title", "My Cheeses");
         return "cheese/index";
     }
@@ -32,17 +29,20 @@ public class CheeseController {
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddCheeseForm(Model model) {
         model.addAttribute("title", "Add Cheese");
+        model.addAttribute(new Cheese());
+        model.addAttribute("cheeseTypes", CheeseType.values());
         return "cheese/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String processAddCheeseForm(@RequestParam String cheeseName, @RequestParam String description) {
-        cheeses.put(cheeseName, description);
-        if (cheeseName.equals("")) {
-            String error = "Please submit a cheese";
+    public String processAddCheeseForm(@ModelAttribute  @Valid Cheese newCheese,
+                                       Errors errors , Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add Cheese");
             return "cheese/add";
-
         }
+
+        CheeseData.add(newCheese);
         return "redirect:";
 
     }
@@ -50,37 +50,40 @@ public class CheeseController {
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemoveCheeseForm(Model model) {
         model.addAttribute("title", "Remove Cheese");
-        //model.addAttribute("cheese", cheese_remove);
-        model.addAttribute("cheeses", this.cheeses);
+        model.addAttribute("cheeses", CheeseData.getAll());
         return "cheese/remove";
     }
 
     @RequestMapping(value = "remove", method = RequestMethod.POST)
-    public String processRemoveCheeseForm(@RequestParam String cheese) {
-            cheese_remove.add(cheese);
+    public String processRemoveCheeseForm(@RequestParam int[] cheeseIds) {
 
-            for (String cheese2: cheese_remove) {
-                cheeses.remove(cheese2);
-            }
-
-            return "redirect:";
+        for (int cheeseId : cheeseIds) {
+            CheeseData.remove(cheeseId);
         }
-
-    @RequestMapping(value = "remove2", method = RequestMethod.GET)
-    public String displayRemoveCheeseForm2(Model model) {
-        model.addAttribute("title", "Remove Cheese");
-        model.addAttribute("cheeses", cheeses);
-        return "cheese/remove2";
-    }
-
-    @RequestMapping(value = "remove2", method = RequestMethod.POST)
-    public String processRemoveCheeseForm2(@RequestParam String cheese) {
-        cheeses.remove(cheese);
-
 
         return "redirect:";
     }
+
+    @RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.GET)
+    public String displayEditForm(Model model, @PathVariable int cheeseId) {
+        Cheese cheese = CheeseData.getById(cheeseId);
+        model.addAttribute("cheese", CheeseData.getById(cheeseId));
+        model.addAttribute("title", "Edit Cheese " + cheese.getName() + " (id=" + cheese.getCheeseId() + ")");
+        return "cheese/edit";
     }
+
+    @RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.POST)
+    public String processEditForm(int cheeseId, String name, String description) {
+        Cheese cheese = CheeseData.getById(cheeseId);
+        cheese.setDescription(description);
+        cheese.setName(name);
+
+        return "redirect:/cheese";
+    }
+}
+
+
+
 
 
 

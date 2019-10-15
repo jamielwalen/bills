@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+
+
+<form method="post">
+    <div class="form-group">
+        <label for="cheese">Cheese Type</label>
+        <input class="form-control" type="text" id="cheese" name="name" th:value="${cheese.name}"/>
+    </div>
+    <div class="form-group">
+        <label for="desc-field">Description</label>
+        <!--    @todo add value field with cheese value on form-->
+        <input class="form-control" th:value="${cheese.description}" id="desc-field" type="text" name="description" />
+    </div>
+
+    <input type="hidden" th:value="${cheese.cheeseId}" name="cheeseId" />
+    <input type="submit" value="Edit Cheese" />
+
+</form>
+
+
+
+</body>
+</html>
